@@ -1,0 +1,12 @@
+[Unit]
+Description=Send Telegram reboot alert
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+ExecStartPre=/bin/sleep 15
+ExecStart=/opt/telegram-reboot-alert/send-alert.sh
+
+[Install]
+WantedBy=multi-user.target
