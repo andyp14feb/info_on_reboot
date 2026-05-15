@@ -4,6 +4,14 @@ Send a Telegram message whenever a Linux machine boots or restarts.
 
 The user only needs to run `install.sh` or `uninstall.sh`. The installer asks for the Telegram bot token, chat ID, and machine description interactively. It also handles cleanup, file installation, permissions, service creation, enabling, and starting.
 
+## Why This Exists
+
+This script was created for development VMs that use DHCP and may get a different IP address after every restart.
+
+In my workflow, these VMs are used for development and are often cloned, modified, tested, destroyed, and cloned again from a template. When a VM starts with a new DHCP address, it is annoying to manually check the IP address by opening the host machine, opening the VM console, logging in, and then inspecting the network configuration.
+
+Instead, this service sends the VM's current IP information to Telegram every time the machine starts. That way, as soon as the VM boots, I already know which IP address to use for SSH, development, testing, or remote access.
+
 ## Features
 
 - One-command install with `bash install.sh`
