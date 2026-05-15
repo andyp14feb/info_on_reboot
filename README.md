@@ -4,6 +4,10 @@ Send a Telegram message whenever a Linux machine boots or restarts.
 
 The user only needs to run `install.sh` or `uninstall.sh`. The installer asks for the Telegram bot token, chat ID, and machine description interactively. It also handles cleanup, file installation, permissions, service creation, enabling, and starting.
 
+## Screenshot
+
+![Telegram reboot alert screenshot](Screenshot%202026-05-15%20143016.png)
+
 ## Why This Exists
 
 This script was created for development VMs that use DHCP and may get a different IP address after every restart.
