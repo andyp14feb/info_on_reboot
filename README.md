@@ -1,6 +1,6 @@
-# Telegram Reboot Alert
+# Telegram Power Alert
 
-Send a Telegram message whenever a Linux machine boots or restarts.
+Send a Telegram message whenever a Linux machine boots, restarts, shuts down, or powers off.
 
 The user only needs to run `install.sh` or `uninstall.sh`. The installer asks for the Telegram bot token, chat ID, and machine description interactively. It also handles cleanup, file installation, permissions, service creation, enabling, and starting.
 
@@ -24,6 +24,8 @@ Instead, this service sends the VM's current IP information to Telegram every ti
 - Cleans old installation before installing again
 - Creates the config file automatically with secure permissions
 - Installs the alert script automatically
+- Sends alerts when the machine boots or restarts
+- Sends alerts when the machine shuts down or powers off
 - Installs, enables, and starts the `systemd` service automatically
 - Uninstall removes the service and installed `/opt/telegram-reboot-alert` directory
 - Does not save the sudo password
@@ -88,6 +90,7 @@ The installer will:
 - Create `/opt/telegram-reboot-alert/config.env` automatically
 - Set secure config permissions automatically
 - Enable and start the service automatically
+- Keep the service active so `systemd` can send a shutdown or power-off alert when stopping it
 
 You do not need to manually edit config files, copy code, run `chmod`, or run `systemctl` commands during normal installation.
 
@@ -141,6 +144,17 @@ After installation:
 - Alert script: `/opt/telegram-reboot-alert/send-alert.sh`
 - Service file: `/etc/systemd/system/telegram-reboot-alert.service`
 - Service name: `telegram-reboot-alert.service`
+
+## Alert Events
+
+The installed service sends two kinds of Telegram alerts:
+
+- Boot/restart alert: sent from `ExecStart` after `network-online.target`
+- Shutdown/power-off alert: sent from `ExecStop` when `systemd` stops the active service
+
+The shutdown alert is skipped during normal manual service stops, reinstalls, and uninstalls. It is sent only when `systemd` is processing `shutdown.target`, `poweroff.target`, `reboot.target`, or `halt.target`.
+
+The shutdown alert depends on network connectivity still being available during shutdown. The service is ordered after `network-online.target`, so `systemd` normally stops it before taking the network down.
 
 ## Check Status
 
